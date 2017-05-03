@@ -133,10 +133,13 @@ function setCookieIndex(index, contentIndex, content) {
 
 function frontEndTranslateToSelectedLang(defaultLangArr, callback) {
     var defaultLangArrToWord = "";
-
-    $.each(defaultLangArr, function(a, b) {
-        defaultLangArrToWord += ("********" + b + "########");
-    })
+    if(typeof(defaultLangArr)=="string"){
+      defaultLangArrToWord = defaultLangArr;
+    }else{
+      $.each(defaultLangArr, function(a, b) {
+          defaultLangArrToWord += ("********" + b + "########");
+      })
+    }
     var translatedLangArr = [];
     translate(defaultLangArrToWord, lang, function(translatedText) {
         translatedText = translatedText.match(/[^[\*\#]+/gm);
