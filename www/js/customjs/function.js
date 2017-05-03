@@ -84,6 +84,10 @@ function setLang() {
         $(".langtc").hide();
     }
 
+    if (checkLang() == "en") {
+        $(".langen").hide();
+    }
+
     if (lang == checkLang()) {
         $(".langDefault").addClass("button-fill");
         $(".langtc").removeClass("button-fill");
