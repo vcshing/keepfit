@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="css/styles.css">
 
     <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/moment.js"></script>
     <script type="text/javascript" src="js/function.js"></script>
     <script type="text/javascript" src="js/local_storage_manager.js"></script>
@@ -97,7 +98,7 @@
                             <a href="#" class="button langDefault word"> </a>
                             <a href="#" class="button langen">English</a>
                         </p>
-
+                        <a href="intro.html" class="button introBtn word"> </a>
                         <div class="sportContentContain">
 
                         </div>
@@ -138,61 +139,151 @@
     <script>
         var lang
         var defaultLangArr = []
+        var loopLangArr = []
         var sportContentLangArr = []
+
         defaultLangArr.push("其他應用");
         defaultLangArr.push("簡易7分鐘TABATA");
         defaultLangArr.push("預設語言");
+        defaultLangArr.push("介紹");
 
-        sportContentLangArr.push("1.開合跳(一秒一下，共30下)");
-        sportContentLangArr.push("2.太空椅(支撐30秒)");
-        sportContentLangArr.push("3.伏地挺身(20-25下)");
-        sportContentLangArr.push("4.平地捲腹(25-30下)");
-        sportContentLangArr.push("5.高低差腳部肌肉訓練(持續30秒)");
-        sportContentLangArr.push("6.深蹲(12-15下)");
-        sportContentLangArr.push("7.雙臂屈伸(俗稱:三頭肌撐體)(盡量把身體重量放在手臂肌肉上)");
-        sportContentLangArr.push("8.撐體");
-        sportContentLangArr.push("9.原地踏步(30秒)");
-        sportContentLangArr.push("10.漸進式訓練跨步");
-        sportContentLangArr.push("11.伏地挺身+轉體");
-        sportContentLangArr.push("12.側撐體");
+
+        loopLangArr.push("今天數量");
+        loopLangArr.push("開始");
+        loopLangArr.push("總數量");
+
+        sportContentLangArr.push("1.開合跳 30秒");
+        sportContentLangArr.push("2.太空椅 30秒");
+        sportContentLangArr.push("3.伏地挺身 30秒(20-25下)");
+        sportContentLangArr.push("4.平地捲腹 30秒(25-30下)");
+        sportContentLangArr.push("5.高低差腳部肌肉訓練 30秒");
+        sportContentLangArr.push("6.深蹲 30秒(12-15下)");
+        sportContentLangArr.push("7.雙臂屈伸(俗稱:三頭肌撐體)(盡量把身體重量放在手臂肌肉上) 30秒");
+        sportContentLangArr.push("8.撐體 30秒");
+        sportContentLangArr.push("9.原地踏步 30秒");
+        sportContentLangArr.push("10.漸進式訓練跨步 30秒");
+        sportContentLangArr.push("11.伏地挺身+轉體 30秒");
+        sportContentLangArr.push("12.側撐體 30秒");
 
 
         $(function() {
-            lang = getCookieLang();
-
+            lang = getCookie("lang", "selectedLang", checkLang());
             //lang = ""
             pageInit();
-
-
-
 
         })
 
         function pageInit() {
             setLang();
-            frontEndTranslateToSelectedLang(defaultLangArr,function(translatedLangArr){
-                assignWordClassTranslation(translatedLangArr);
-            });
-            frontEndTranslateToSelectedLang(sportContentLangArr,function(translatedLangArr){
-              var sportContentContainHtml="";
-              $.each(translatedLangArr, function(index, content) {
-                sportContentContainHtml += "                            <div class=\"card\">";
-                sportContentContainHtml += "                                <div class=\"card-header word\">";
-                sportContentContainHtml += "";
-                sportContentContainHtml += content;
-                sportContentContainHtml += "";
-                sportContentContainHtml += "                                <\/div>";
-                sportContentContainHtml += "                                <div class=\"card-content\"><img src=\"image\/"+(index+1)+".GIF\" width=\"100%\"><\/div>";
-                sportContentContainHtml += "                                <div class=\"card-footer no-border\">";
-                sportContentContainHtml += "                                    <a href=\"#\" class=\"link\"> <\/a>";
-                sportContentContainHtml += "                                    <a href=\"#\" class=\"link\">Start<\/a>";
-                sportContentContainHtml += "                                    <a href=\"#\" class=\"link\"> <\/a>";
-                sportContentContainHtml += "                                <\/div>";
-                sportContentContainHtml += "                            <\/div>";
-              })
 
-              $(".sportContentContain").html(sportContentContainHtml);
+            frontEndTranslateToSelectedLang(sportContentLangArr, function(translatedLangArr) {
+
+                var sportContentContainHtml = "";
+                $.each(translatedLangArr, function(index, content) {
+
+                    var todayAmt = getCookie("todayAmt" + moment().format('YYYYMMDD'), index, "0");
+                    var overAllAmt = getCookie("overAllAmt", index, "0");
+
+
+                    var todayAmtToWord = sec2str(todayAmt);
+                    var overAllAmtToWord = sec2str(overAllAmt);
+
+                    sportContentContainHtml += '                            <div class="card">';
+                    sportContentContainHtml += '                                <div class="card-header">';
+                    sportContentContainHtml += '';
+                    sportContentContainHtml += content;
+                    sportContentContainHtml += '';
+                    sportContentContainHtml += '                                </div>';
+                    sportContentContainHtml += '                                <div class="card-content"><img src="image/' + index + '.GIF" width="100%"></div>';
+                    sportContentContainHtml += '                                <div class="card-footer no-border">';
+                    sportContentContainHtml += '                                    <a><span class="loopword0"> </span> : <span class="todayAmt' + index + '" data-sec="' + todayAmt + '">' + todayAmtToWord + '</span></a>';
+                    sportContentContainHtml += '                                    <a href="#" class="sportContentImage' + index + ' loopword1"> </a>';
+                    sportContentContainHtml += '                                    <a><span class="loopword2"> </span> : <span class="overAllAmt' + index + '" data-sec="' + overAllAmt + '">' + overAllAmtToWord + '</span></a>';
+                    sportContentContainHtml += '                                </div>';
+                    sportContentContainHtml += '                            </div>';
+
+
+                })
+
+                $(".sportContentContain").html(sportContentContainHtml);
+
+                $.each(translatedLangArr, function(index, content) {
+                    $(".sportContentImage" + index).bind("click", function() {
+                        var todayAmt = parseInt($(".todayAmt" + index).attr("data-sec"));
+                        if (todayAmt < 0) {
+                            todayAmt = 0;
+                        }
+                        var overAllAmt = parseInt($(".overAllAmt" + index).attr("data-sec"));
+                        if (overAllAmt < 0) {
+                            overAllAmt = 0;
+                        }
+
+                        var modal = myApp.modal({
+                            title: ' ',
+                            text: ' ',
+                            afterText: '<div class="swiper-container" style="width: auto; margin:5px -15px -15px">' +
+                                '<div class="swiper-pagination"></div>' +
+                                '<div class="swiper-wrapper">' +
+                                '<div class="swiper-slide"><center><img src="image/' + index + '.GIF" height="150" style="display:block"></center></div>' +
+                                '</div>' +
+                                '</div>',
+                            buttons: [{
+                                text: 'End',
+                                class: 'tewts',
+                                bold: true,
+                                onClick: function(e) {
+                                    clearInterval(popupSetInterval);
+
+                                    if(getCookie("todayAmt"+ moment().format('YYYYMMDD'), "" , "")==""){
+                                        setCookieIndex("sportDay", "", moment().format('YYYYMMDD') );
+                                    }
+
+                                    setCookieIndex("todayAmt"+ moment().format('YYYYMMDD'), index, todayAmt + (ConfigIntervalTime - IntervalTime));
+                                    setCookieIndex("overAllAmt", index, overAllAmt + (ConfigIntervalTime - IntervalTime));
+                                    pageInit();
+                                }
+                            }]
+                        })
+                        var IntervalTime = 30;
+                        var ConfigIntervalTime = 30;
+                        var IntervalTitleTime = 3;
+                        var popupSetInterval = setInterval(function() {
+                            if (IntervalTitleTime > 0) {
+                                $(".modal-title").html("Ready " + IntervalTitleTime);
+                                IntervalTitleTime--;
+                            } else {
+                                if (IntervalTime == 0) {
+                                    clearInterval(popupSetInterval);
+                                    myApp.closeModal();
+                                    if(getCookie("todayAmt"+ moment().format('YYYYMMDD'), "" , "")==""){
+                                        setCookieIndex("sportDay", "", moment().format('YYYYMMDD') );
+                                    }
+                                    setCookieIndex("todayAmt"+ moment().format('YYYYMMDD'), index, todayAmt + (ConfigIntervalTime - IntervalTime));
+                                    setCookieIndex("overAllAmt", index, overAllAmt + (ConfigIntervalTime - IntervalTime));
+                                    pageInit();
+                                } else {
+                                    $(".modal-title").html("GO!");
+                                    $(".modal-text").html(IntervalTime);
+                                }
+                                IntervalTime--;
+                            }
+                        }, 1000);
+
+                    })
+
+                    frontEndTranslateToSelectedLang(defaultLangArr, function(translatedLangArr) {
+                        assignWordClassTranslation(translatedLangArr,"word");
+                    });
+
+                    frontEndTranslateToSelectedLang(loopLangArr, function(translatedLangArr) {
+                        assignLoopWordClassTranslation(translatedLangArr);
+                    });
+                })
+
+
             });
+
+
         }
     </script>
 </body>

@@ -99,26 +99,47 @@ function setLang() {
     }
 }
 
-function getCookieLang() {
-    cookie = storageManager.getCookie();
+function getCookie(index, contentIndex, defaultValue) {
+    var contentIndex=String(contentIndex);
+    var cookie = storageManager.getCookie(index);
     if (cookie == "" || cookie == null) {
-        storageManager.setCookie({
-            "selectedLang": checkLang()
-        });
+        return defaultValue;
+    } else if (contentIndex==""){
+      return cookie;
+    }else{
+      if(cookie[contentIndex] == undefined){
+          return defaultValue;
+      }else{
+          return cookie[contentIndex];
+      }
     }
-    cookie = storageManager.getCookie();
-    return cookie.selectedLang;
 }
 
-function frontEndTranslateToSelectedLang(defaultLangArr,callback) {
+function setCookie(index, array) {
+    storageManager.setCookie(index , array)
+}
+
+function setCookieIndex(index, contentIndex, content) {
+    var contentIndex=String(contentIndex);
+   var cookieArray = getCookie(index, "", [])
+   if(contentIndex==""){
+     cookieArray[cookieArray.length]= content;
+   }else{
+     cookieArray[contentIndex]= content;
+   }
+    storageManager.setCookie(index , cookieArray)
+}
+
+
+function frontEndTranslateToSelectedLang(defaultLangArr, callback) {
     var defaultLangArrToWord = "";
 
     $.each(defaultLangArr, function(a, b) {
-        defaultLangArrToWord += ("[[" + b + "]]");
+        defaultLangArrToWord += ("********" + b + "########");
     })
     var translatedLangArr = [];
     translate(defaultLangArrToWord, lang, function(translatedText) {
-        translatedText = translatedText.match(/[^[\[\]]+/gm);
+        translatedText = translatedText.match(/[^[\*\#]+/gm);
 
         $.each(translatedText, function(a, b) {
             if (b != "" && b != " ") {
@@ -126,20 +147,29 @@ function frontEndTranslateToSelectedLang(defaultLangArr,callback) {
             }
         })
 
-        if (typeof(callback) == "function"){
-          callback(translatedLangArr);
+        if (typeof(callback) == "function") {
+            callback(translatedLangArr);
         }
     })
 }
 
-function assignWordClassTranslation(translatedLangArr){
-  $(".word").each(function(a, b) {
-      if ($(this).html() != "" && $(this).html() != "undefined") {
-          $(this).html(translatedLangArr[a]);
-      } else if ($(this).attr("placeholder") != "" && $(this).attr("placeholder") != "undefined") {
-          $(this).attr("placeholder", translatedLangArr[a]);
-      }
-  })
+function assignWordClassTranslation(translatedLangArr,containClass) {
+    $("."+containClass).each(function(a, b) {
+
+        if ($(this).html() != "" && $(this).html() != "undefined") {
+            $(this).html(translatedLangArr[a]);
+        } else if ($(this).attr("placeholder") != "" && $(this).attr("placeholder") != "undefined") {
+            $(this).attr("placeholder", translatedLangArr[a]);
+        }
+    })
+}
+
+function assignLoopWordClassTranslation(translatedLangArr) {
+
+    $.each(translatedLangArr, function(index, content) {
+
+        $(".loopword" + index).html(translatedLangArr[index]);
+    })
 }
 
 function translate(keyword, lang, callback) {
@@ -167,6 +197,13 @@ function translate(keyword, lang, callback) {
     });
 }
 
+function sec2str(t){
+    var d = Math.floor(t/86400),
+        h = ('0'+Math.floor(t/3600) % 24).slice(-2),
+        m = ('0'+Math.floor(t/60)%60).slice(-2),
+        s = ('0' + t % 60).slice(-2);
+    return (d>0?d+'Day ':'')+(h>0?h+':':'')+(m>0?m+':':'')+(t>60?s:s+'Sec');
+}
 
 function getHomePageListRank(listType) {
     $.ajax({

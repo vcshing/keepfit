@@ -41,7 +41,7 @@ $('.startTutorials').on('click', function (e) {
 
 $(".langen").bind("click", function() {
   lang = "en";
-  storageManager.setCookie({"selectedLang": lang});
+  storageManager.setCookie("lang",{"selectedLang": lang});
   pageInit();
 
 })
@@ -49,12 +49,12 @@ $(".langen").bind("click", function() {
 $(".langtc").bind("click", function() {
 //  alert(1);
   lang = "zh-tw";
-  storageManager.setCookie({"selectedLang": lang});
+  storageManager.setCookie("lang",{"selectedLang": lang});
   pageInit();
 })
 
 $(".langDefault").bind("click", function() {
   lang = checkLang();
-  storageManager.setCookie({"selectedLang": lang});
+  storageManager.setCookie("lang",{"selectedLang": lang});
   pageInit();
 })
