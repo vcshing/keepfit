@@ -39,6 +39,10 @@ $('.startTutorials').on('click', function (e) {
 
 });
 
+$(".shareApp").bind("click",function(e){
+  window.plugins.socialsharing.share("Keep Fit - TABATA", "Good Apps", "", "https://play.google.com/store/apps/details?id=com.skyexplorer.keepfit");
+})
+
 $(".langen").bind("click", function() {
   lang = "en";
   storageManager.setCookie("lang",{"selectedLang": lang});
