@@ -358,16 +358,16 @@
 
                     })
 
-
-                    frontEndTranslateToSelectedLang(defaultLangArr, function(translatedLangArr) {
-                        assignWordClassTranslation(translatedLangArr, "word");
-                    });
-
-                    frontEndTranslateToSelectedLang(loopLangArr, function(translatedLangArr) {
-                        assignLoopWordClassTranslation(translatedLangArr);
-                    });
                 })
 
+
+                frontEndTranslateToSelectedLang(defaultLangArr, function(translatedLangArr) {
+                    assignWordClassTranslation(translatedLangArr, "word");
+                });
+
+                frontEndTranslateToSelectedLang(loopLangArr, function(translatedLangArr) {
+                    assignLoopWordClassTranslation(translatedLangArr);
+                });
 
             });
 

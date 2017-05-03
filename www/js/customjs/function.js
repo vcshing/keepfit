@@ -137,7 +137,7 @@ function frontEndTranslateToSelectedLang(defaultLangArr, callback) {
       defaultLangArrToWord = defaultLangArr;
     }else{
       $.each(defaultLangArr, function(a, b) {
-          defaultLangArrToWord += ("********" + b + "########");
+          defaultLangArrToWord += ("***" + b + "###");
       })
     }
     var translatedLangArr = [];
