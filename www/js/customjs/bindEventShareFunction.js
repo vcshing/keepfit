@@ -59,6 +59,7 @@ $(".langtc").bind("click", function() {
 
 $(".langDefault").bind("click", function() {
   lang = checkLang();
+
   storageManager.setCookie("lang",{"selectedLang": lang});
   pageInit();
 })
