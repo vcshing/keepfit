@@ -141,12 +141,12 @@ function frontEndTranslateToSelectedLang(defaultLangArr, callback) {
       defaultLangArrToWord = defaultLangArr;
     }else{
       $.each(defaultLangArr, function(a, b) {
-          defaultLangArrToWord += ("☾ " + b + " ☽");
+          defaultLangArrToWord += ("" + b + "✰");
       })
     }
     var translatedLangArr = [];
     translate(defaultLangArrToWord, lang, function(translatedText) {
-        translatedText = translatedText.match(/[^[\☾\☽]+/gm);
+                translatedText = translatedText.match(/[^[\✰]+/gm);
 
         $.each(translatedText, function(a, b) {
             if (b != "" && b != " ") {
@@ -185,7 +185,7 @@ function translate(keyword, lang, callback) {
     }
     $.ajax({
         type: "post",
-        url: "http://gogogo.synology.me/googletranslate/translate.php",
+        url: "http://gogogo.synology.me/googletranslate/translateArr.php",
         data: {
             "keyword": keyword,
             "lang": lang
